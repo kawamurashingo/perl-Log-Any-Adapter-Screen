@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches:
+      - ci/test-log-level
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl: ['5.40']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Install dependencies
+        run: cpanm --notest Log::Any Term::ANSIColor
+      - name: Run tests
+        run: prove -lr t
