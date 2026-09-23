@@ -1,0 +1,35 @@
+name: perl
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl:
+          - "5.10"
+          - "5.16"
+          - "5.26"
+          - "5.32"
+          - "5.38"
+          - "5.40"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - name: Install dependencies
+        run: |
+          cpanm --notest Log::Any Log::Any::Adapter Term::ANSIColor
+
+      - name: Run test suite
+        run: prove -lr t
