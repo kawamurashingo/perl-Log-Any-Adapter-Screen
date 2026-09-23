@@ -28,7 +28,8 @@ jobs:
           perl-version: ${{ matrix.perl }}
 
       - name: Install dependencies
-        run: cpanm --notest --installdeps .
+        run: |
+          cpanm --notest Log::Any Log::Any::Adapter Term::ANSIColor
 
       - name: Run test suite
         run: prove -lr t
